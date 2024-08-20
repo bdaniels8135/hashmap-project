@@ -47,7 +47,7 @@ class HashLinkedList {
   remove(key) {
     let prevNode;
     let currentNode = this.#head;
-    while (currentNode.key != key || currentNode.nextNode != null) {
+    while (currentNode.key != key && currentNode.nextNode != null) {
       prevNode = currentNode;
       currentNode = currentNode.nextNode;
     }
