@@ -1,6 +1,6 @@
 import Node from "./Node.mjs";
 
-class HashLinkedList {
+export default class HashLinkedList {
   #head;
 
   #tail;
@@ -58,5 +58,3 @@ class HashLinkedList {
     return this;
   }
 }
-
-export default HashLinkedList;
