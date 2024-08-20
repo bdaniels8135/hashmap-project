@@ -57,4 +57,52 @@ export default class HashLinkedList {
     if (prevNode.nextNode == null) this.#tail = prevNode;
     return this;
   }
+
+  updateValue(key, newValue) {
+    let currentNode = this.#head;
+    while (currentNode.nextNode != null) {
+      if (currentNode.key === key) {
+        currentNode.value = newValue;
+        return this;
+      }
+      currentNode = currentNode.nextNode;
+    }
+    if (currentNode.key === key) {
+      currentNode.value = newValue;
+      return this;
+    }
+  }
+
+  get keys() {
+    const keys = [];
+    let currentNode = this.#head;
+    while (currentNode.nextNode != null) {
+      keys.push(currentNode.key);
+      currentNode = currentNode.nextNode;
+    }
+    keys.push(currentNode.key);
+    return keys;
+  }
+
+  get values() {
+    const values = [];
+    let currentNode = this.#head;
+    while (currentNode.nextNode != null) {
+      values.push(currentNode.value);
+      currentNode = currentNode.nextNode;
+    }
+    values.push(currentNode.key);
+    return values;
+  }
+
+  get entries() {
+    const entries = [];
+    let currentNode = this.#head;
+    while (currentNode.nextNode != null) {
+      entries.push([currentNode.key, currentNode.value]);
+      currentNode = currentNode.nextNode;
+    }
+    entries.push([currentNode.key, currentNode.value]);
+    return entries;
+  }
 }
