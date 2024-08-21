@@ -9,7 +9,7 @@ export default class HashMap {
 
   #data;
 
-  constructor(numBuckets = 16, loadFactor = 0.8) {
+  constructor(numBuckets = 16, loadFactor = 0.75) {
     this.#length = 0;
     this.#numBuckets = numBuckets;
     this.#loadFactor = loadFactor;
@@ -25,23 +25,68 @@ export default class HashMap {
       );
   }
 
-  set(key, value) {}
+  #reallocate() {
+    const entries = this.entries;
+    this.#numBuckets *= 2;
+    this.#data = [...Array(this.#numBuckets)].map(() => new HashLinkedList());
+    entries.forEach((entry) => {
+      const [key, value] = entry;
+      this.set(key, value);
+    });
+  }
 
-  get(key) {}
+  set(key, value) {
+    let bucket = this.#data[this.#hash(key)];
+    if (bucket.contains(key)) {
+      bucket.update(key, value);
+      return this;
+    }
+    this.#length += 1;
+    if (this.#length / this.#numBuckets > this.#loadFactor) {
+      this.#reallocate();
+      bucket = this.#data[this.#hash(key)];
+    }
+    bucket.append(key, value);
+    return this;
+  }
 
-  has(key) {}
+  get(key) {
+    const bucket = this.#data[this.#hash(key)];
+    return bucket.getValue(key);
+  }
 
-  remove(key) {}
+  has(key) {
+    const bucket = this.#data[this.#hash(key)];
+    return bucket.contains(key);
+  }
+
+  remove(key) {
+    const bucket = this.#data[this.#hash(key)];
+    if (!bucket.contains(key)) return false;
+    this.#length -= 1;
+    bucket.remove(key);
+    return true;
+  }
 
   get length() {
     return this.#length;
   }
 
-  clear() {}
+  clear() {
+    this.#data.map(() => new HashLinkedList());
+    this.#length = 0;
+    return this;
+  }
 
-  keys() {}
+  get keys() {
+    return this.#data.flatMap((bucket) => bucket.keys());
+  }
 
-  values() {}
+  get values() {
+    return this.#data.flatMap((bucket) => bucket.values());
+  }
 
-  entries() {}
+  get entries() {
+    return this.#data.flatMap((bucket) => bucket.entries());
+  }
 }

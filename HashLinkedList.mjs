@@ -58,7 +58,7 @@ export default class HashLinkedList {
     return this;
   }
 
-  updateValue(key, newValue) {
+  update(key, newValue) {
     let currentNode = this.#head;
     while (currentNode.nextNode != null) {
       if (currentNode.key === key) {
