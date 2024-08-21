@@ -28,7 +28,7 @@ export default class HashMap {
   #reallocate() {
     const entries = this.entries;
     this.#numBuckets *= 2;
-    this.#data = [...Array(this.#numBuckets)].map(() => new HashLinkedList());
+    this.clear();
     entries.forEach((entry) => {
       const [key, value] = entry;
       this.set(key, value);
@@ -73,20 +73,20 @@ export default class HashMap {
   }
 
   clear() {
-    this.#data.map(() => new HashLinkedList());
+    this.#data = [...Array(this.#numBuckets)].map(() => new HashLinkedList());
     this.#length = 0;
     return this;
   }
 
   get keys() {
-    return this.#data.flatMap((bucket) => bucket.keys());
+    return this.#data.flatMap((bucket) => bucket.keys);
   }
 
   get values() {
-    return this.#data.flatMap((bucket) => bucket.values());
+    return this.#data.flatMap((bucket) => bucket.values);
   }
 
   get entries() {
-    return this.#data.flatMap((bucket) => bucket.entries());
+    return this.#data.flatMap((bucket) => bucket.entries);
   }
 }

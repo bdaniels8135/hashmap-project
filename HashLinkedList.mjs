@@ -36,6 +36,7 @@ export default class HashLinkedList {
   }
 
   contains(key) {
+    if (this.#head == null) return false;
     let currentNode = this.#head;
     while (currentNode.nextNode != null) {
       if (currentNode.key === key) return true;
@@ -52,9 +53,11 @@ export default class HashLinkedList {
       currentNode = currentNode.nextNode;
     }
     if (currentNode.key != key) return this;
-    prevNode.nextNode = currentNode.nextNode;
+    if (!prevNode) this.#head = currentNode.nextNode;
+    else prevNode.nextNode = currentNode.nextNode;
     this.#size -= 1;
-    if (prevNode.nextNode == null) this.#tail = prevNode;
+    if (currentNode.nextNode == null && !!prevNode) this.#tail = prevNode;
+    else this.#tail = null;
     return this;
   }
 
@@ -75,6 +78,7 @@ export default class HashLinkedList {
 
   get keys() {
     const keys = [];
+    if (this.#head == null) return keys;
     let currentNode = this.#head;
     while (currentNode.nextNode != null) {
       keys.push(currentNode.key);
@@ -86,17 +90,19 @@ export default class HashLinkedList {
 
   get values() {
     const values = [];
+    if (this.#head == null) return values;
     let currentNode = this.#head;
     while (currentNode.nextNode != null) {
       values.push(currentNode.value);
       currentNode = currentNode.nextNode;
     }
-    values.push(currentNode.key);
+    values.push(currentNode.value);
     return values;
   }
 
   get entries() {
     const entries = [];
+    if (this.#head == null) return entries;
     let currentNode = this.#head;
     while (currentNode.nextNode != null) {
       entries.push([currentNode.key, currentNode.value]);
